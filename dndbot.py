@@ -46,7 +46,14 @@ async def play(ctx, *, query):
 	if connected_to_voice_channel:
 		bot_voice_client.play(FFmpegPCMAudio(source, **FFMPEG_OPTS), after=lambda e: print('done', e))
 
-    
+
+@bot.command()
+async def stop(ctx):
+	bot_voice_client = get(ctx.bot.voice_clients, guild=ctx.guild)
+	if bot_voice_client and bot_voice_client.is_playing():
+		bot_voice_client.stop()
+	
+
 def search(query):
     with yt_dlp.YoutubeDL({'format': 'bestaudio', 'noplaylist':'True' '--verbose'}) as ydl:
         try: requests.get(query)
